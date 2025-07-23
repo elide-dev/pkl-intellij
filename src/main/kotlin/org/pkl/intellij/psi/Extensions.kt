@@ -21,6 +21,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Iconable
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.TokenType
@@ -32,6 +33,7 @@ import javax.swing.Icon
 import org.pkl.intellij.PklIcons
 import org.pkl.intellij.PklImportOptimizer.ImportInfo
 import org.pkl.intellij.PklLanguage
+import org.pkl.intellij.PklStandaloneFilesExtension
 import org.pkl.intellij.cacheKeyService
 import org.pkl.intellij.packages.dto.PklProject
 import org.pkl.intellij.packages.pklPackageService
@@ -1026,3 +1028,6 @@ fun PklTypeDefOrModule.hasDeclaredMethod(name: String?): Boolean {
 
 val PsiElement.pklReference: PklReference?
   get() = reference as? PklReference
+
+val PsiFile.isStandaloneFile: Boolean
+  get() = PklStandaloneFilesExtension.EP_NAME.extensionList.any { it.isStandaloneFile(this) }
