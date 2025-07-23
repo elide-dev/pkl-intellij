@@ -82,6 +82,13 @@
   <depends>org.intellij.intelliLang</depends>
   <depends>org.intellij.plugins.markdown</depends>
 
+  <extensionPoints>
+    <extensionPoint dynamic="true"
+                    name="standaloneFiles"
+                    interface="org.pkl.intellij.PklStandaloneFilesExtension"
+    />
+  </extensionPoints>
+
   <extensions defaultExtensionNs="com.intellij">
     <additionalLibraryRootsProvider
         implementation="org.pkl.intellij.packages.PklAdditionalLibraryRootsProvider"/>
