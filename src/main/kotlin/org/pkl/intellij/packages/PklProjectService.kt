@@ -336,6 +336,7 @@ class PklProjectService(private val project: Project) :
     val projectAware = PklExternalSystemProjectAware(project)
     val projectTracker = ExternalSystemProjectTracker.getInstance(project)
     projectTracker.register(projectAware)
+    projectTracker.scheduleProjectRefresh()
   }
 
   /**
