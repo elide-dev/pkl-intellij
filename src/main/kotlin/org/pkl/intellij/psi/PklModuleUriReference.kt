@@ -467,8 +467,10 @@ class PklModuleUriReference(uri: PklModuleUri, rangeInElement: TextRange) :
           return findOnFileSystem(sourceVirtualFile, targetUriStr)
         }
 
-        // unsupported scheme
-        else -> return null
+        // unsupported scheme, ask extensions
+        else -> return PklModuleResolverExtension.EP_NAME.extensionList.firstNotNullOfOrNull {
+          it.resolveModuleFile(targetUriStr, project, context)
+        }
       }
     }
 

@@ -87,6 +87,10 @@
                     name="standaloneFiles"
                     interface="org.pkl.intellij.PklStandaloneFilesExtension"
     />
+    <extensionPoint dynamic="true"
+                    name="moduleResolver"
+                    interface="org.pkl.intellij.psi.PklModuleResolverExtension"
+    />
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">
