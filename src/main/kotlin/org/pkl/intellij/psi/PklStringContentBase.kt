@@ -18,7 +18,9 @@ package org.pkl.intellij.psi
 import com.intellij.lang.ASTNode
 import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiLanguageInjectionHost
+import com.intellij.psi.PsiReference
 import com.intellij.psi.TokenType
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 
 abstract class PklStringContentBase(node: ASTNode) :
   PklAstWrapperPsiElement(node), PklStringContent, PsiLanguageInjectionHost {
@@ -46,5 +48,9 @@ abstract class PklStringContentBase(node: ASTNode) :
 
     // remaining decision is made in [PklStringLiteralInjector.getLanguagesToInject()]
     return true
+  }
+
+  override fun getReferences(): Array<out PsiReference?> {
+    return ReferenceProvidersRegistry.getReferencesFromProviders(this)
   }
 }
