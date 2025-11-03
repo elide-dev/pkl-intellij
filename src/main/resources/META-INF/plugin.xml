@@ -91,6 +91,10 @@
                     name="moduleResolver"
                     interface="org.pkl.intellij.psi.PklModuleResolverExtension"
     />
+    <extensionPoint dynamic="true"
+                    name="moduleUriCompletionContributor"
+                    interface="org.pkl.intellij.completion.PklModuleUriCompletionExtension"
+    />
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">

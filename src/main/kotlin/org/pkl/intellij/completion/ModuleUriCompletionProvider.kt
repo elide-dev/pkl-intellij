@@ -56,14 +56,14 @@ class ModuleUriCompletionProvider(private val packageUriOnly: Boolean = false) :
         LookupElementBuilder.create(HTTPS_SCHEME),
         LookupElementBuilder.create(MODULE_PATH_SCHEME).completeAgain(),
         LookupElementBuilder.create(PACKAGE_SCHEME).completeAgain()
-      )
+      ) + PklModuleUriCompletionExtension.EP_NAME.extensionList.asSequence().flatMap { it.schemes(globbable = false) }
 
     private val GLOBBABLE_SCHEME_ELEMENTS =
       listOf(
         LookupElementBuilder.create(FILE_SCHEME).completeAgain(),
         LookupElementBuilder.create(MODULE_PATH_SCHEME).completeAgain(),
         LookupElementBuilder.create(PACKAGE_SCHEME).completeAgain()
-      )
+      ) + PklModuleUriCompletionExtension.EP_NAME.extensionList.asSequence().flatMap { it.schemes(globbable = true) }
 
     private val LOCAL_FILE_SYSTEM_ROOT: VirtualFile =
       LocalFileSystem.getInstance().findFileByPath("/")!!
@@ -196,6 +196,10 @@ class ModuleUriCompletionProvider(private val packageUriOnly: Boolean = false) :
         }
         completeRelativeUri(targetUri, sourceModule, isGlobImport, collector)
       }
+    }
+
+    PklModuleUriCompletionExtension.EP_NAME.forEachExtensionSafe {
+      it.contribute(targetUri, isGlobImport, sourceModule, project, collector)
     }
 
     resultSet.addAllElements(collector)

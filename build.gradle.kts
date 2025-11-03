@@ -190,6 +190,7 @@ tasks.publishPlugin {
 
 publishing {
   repositories {
+    mavenLocal()
     maven {
       name = "projectLocal" // affects task names
       url = uri("file:///$buildDir/m2")
