@@ -53,6 +53,17 @@ Before a release, run Code->Inspect Code->Whole Project (at least) for pkl-hub p
 The release CI build publishes the plugin zip and the `updatePlugins.xml`. +
 The plugin update site is automatically updated.
 
+=== Publishing to our custom plugin repository
+
+`./gradlew buildPlugin` builds the distribution into `build/distributions`, then `tools/deploy.sh` uploads it to our
+custom plugin repository. All metadata (plugin id, name, description, vendor, version, since/until build) is read from
+the patched `plugin.xml` inside the built archive, so the upload always matches what the IDE will see.
+
+The script requires `xmllint`, `jq`, `curl` and `unzip`, plus these environment variables:
+
+* `ELIDE_PLUGINS_URL` (or `PLUGINS_URL`): base URL of the plugin repository
+* `ELIDE_PLUGINS_KEY`: API key for the plugin repository
+
 == Resources
 
 === General
