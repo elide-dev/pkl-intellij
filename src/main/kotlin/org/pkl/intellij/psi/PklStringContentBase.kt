@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 Apple Inc. and the Pkl project authors. All rights reserved.
+ * Copyright © 2024-2026 Apple Inc. and the Pkl project authors. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package org.pkl.intellij.psi
 import com.intellij.lang.ASTNode
 import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiLanguageInjectionHost
+import com.intellij.psi.PsiReference
 import com.intellij.psi.TokenType
+import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 
 abstract class PklStringContentBase(node: ASTNode) :
   PklAstWrapperPsiElement(node), PklStringContent, PsiLanguageInjectionHost {
@@ -47,4 +49,16 @@ abstract class PklStringContentBase(node: ASTNode) :
     // remaining decision is made in [PklStringLiteralInjector.getLanguagesToInject()]
     return true
   }
+
+  /**
+   * Collects references contributed by [com.intellij.psi.PsiReferenceContributor]s registered for
+   * the Pkl language.
+   *
+   * The default implementation inherited from the platform only returns [getReference], which means
+   * that reference contributors are never consulted for string contents. Overriding this lets
+   * features (in this plugin or in plugins that build on it) attach references such as file paths
+   * or class names to string literals.
+   */
+  override fun getReferences(): Array<PsiReference> =
+    ReferenceProvidersRegistry.getReferencesFromProviders(this)
 }
