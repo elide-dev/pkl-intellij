@@ -27,6 +27,7 @@ import javax.swing.JComponent
 import org.pkl.intellij.packages.*
 import org.pkl.intellij.packages.dto.PklProject
 import org.pkl.intellij.psi.PklModule
+import org.pkl.intellij.psi.isStandaloneFile
 import org.pkl.intellij.toolchain.pklCli
 
 class PklSyncProjectNotificationProvider(project: Project) : EditorNotificationProvider {
@@ -48,7 +49,7 @@ class PklSyncProjectNotificationProvider(project: Project) : EditorNotificationP
           ) {
             EditorNotifications.getInstance(project).updateAllNotifications()
           }
-        }
+        },
       )
     }
   }
@@ -65,6 +66,7 @@ class PklSyncProjectNotificationProvider(project: Project) : EditorNotificationP
     if (psiFile !is PklModule) return noComponent
     // isInPklProject performs a VFS directory walk — must run off EDT here, not in the Function
     if (!psiFile.isInPklProject) return noComponent
+    if (psiFile.isStandaloneFile) return noComponent
     val hasPklProject = psiFile.pklProject != null
     val isOutOfDate = project.pklProjectService.isOutOfDate()
     val error = if (!hasPklProject) project.pklProjectService.getError(file) else null

@@ -145,6 +145,17 @@
   <depends>org.intellij.intelliLang</depends>
   <depends>org.intellij.plugins.markdown</depends>
 
+  <extensionPoints>
+    <extensionPoint dynamic="true"
+                    name="standaloneFiles"
+                    interface="org.pkl.intellij.PklStandaloneFilesExtension"
+    />
+    <extensionPoint dynamic="true"
+                    name="moduleResolver"
+                    interface="org.pkl.intellij.psi.PklModuleResolverExtension"
+    />
+  </extensionPoints>
+
   <extensions defaultExtensionNs="com.intellij">
     <additionalLibraryRootsProvider
         implementation="org.pkl.intellij.packages.PklAdditionalLibraryRootsProvider"/>
