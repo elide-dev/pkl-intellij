@@ -19,8 +19,8 @@ import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.psi.PsiFile
 
 /**
- * Extension allowing third-party code to register "standalone" files, which are not part of any Pkl project, and do
- * not trigger the "Sync Pkl project" notification or the project aware settings file tracker.
+ * Extension allowing third-party code to register "standalone" files, which are not part of any Pkl project and are
+ * evaluated by another tool: they do not trigger the "Sync Pkl project" or "Pkl CLI not found" notifications.
  */
 interface PklStandaloneFilesExtension {
   /** Returns whether the given [file] should be considered as "standalone" (i.e. not part of a regular Pkl project). */

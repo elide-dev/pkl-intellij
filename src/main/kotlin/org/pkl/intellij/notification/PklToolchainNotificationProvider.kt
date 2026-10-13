@@ -18,11 +18,13 @@ package org.pkl.intellij.notification
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiManager
 import com.intellij.ui.EditorNotificationProvider
 import com.intellij.ui.EditorNotifications
 import java.util.function.Function
 import javax.swing.JComponent
 import org.pkl.intellij.PklFileType
+import org.pkl.intellij.psi.isStandaloneFile
 import org.pkl.intellij.settings.PklSettingsChangedListener
 import org.pkl.intellij.settings.PklSettingsComponent.Companion.PKL_SETTINGS_CHANGED_TOPIC
 import org.pkl.intellij.toolchain.pklCli
@@ -43,8 +45,12 @@ class PklToolchainNotificationProvider(project: Project) : EditorNotificationPro
     project: Project,
     file: VirtualFile
   ): Function<in FileEditor, out JComponent?> {
+    // Standalone files are evaluated by the tool that owns them, never by the Pkl CLI; findFile needs the read
+    // action this method runs in, not the EDT the returned function runs on
+    val standalone = PsiManager.getInstance(project).findFile(file)?.isStandaloneFile == true
     return Function { _ ->
       if (file.fileType != PklFileType) return@Function null
+      if (standalone) return@Function null
       if (project.pklCli.isAvailable()) return@Function null
       PklEditorNotificationPanel().apply {
         text = "Pkl CLI not found"
